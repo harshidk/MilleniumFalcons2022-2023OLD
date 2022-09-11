@@ -3,40 +3,43 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Robot;
 
 @TeleOp(name="MecanumDrive", group="19380")
 @Disabled
-public class MecanumStarter extends LinearOpMode {
+public class Teleop extends OpMode{
+    OpMode opmode;
+    public Robot robot = new Robot();
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftFrontDrive = null;
     private DcMotor leftBackDrive = null;
     private DcMotor rightFrontDrive = null;
     private DcMotor rightBackDrive = null;
+    HardwareMap hwMap = null;
+    Telemetry t = null;
 
-    @Override
-    public void runOpMode() {
-
-        // Initialize the hardware variables. Note that the strings used here must correspond
-        // to the names assigned during the robot configuration step on the DS or RC devices.
-        leftFrontDrive  = hardwareMap.get(DcMotor.class, "left_front_drive");
-        leftBackDrive  = hardwareMap.get(DcMotor.class, "left_back_drive");
-        rightFrontDrive = hardwareMap.get(DcMotor.class, "right_front_drive");
-        rightBackDrive = hardwareMap.get(DcMotor.class, "right_back_drive");
+    public void init(){
+        robot.init(hwMap, t);
+        leftFrontDrive  = hwMap.get(DcMotor.class, "left_front_drive");
+        leftBackDrive  = hwMap.get(DcMotor.class, "left_back_drive");
+        rightFrontDrive = hwMap.get(DcMotor.class, "right_front_drive");
+        rightBackDrive = hwMap.get(DcMotor.class, "right_back_drive");
 
 
         leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
         rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
+    }
 
-        // Wait for the game to start (driver presses PLAY)
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
-
-        waitForStart();
-        runtime.reset();
+    @Override
+    public void loop() {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
@@ -91,12 +94,17 @@ public class MecanumStarter extends LinearOpMode {
             rightBackDrive.setPower(rightBackPower);
 
             // Show the elapsed game time and wheel power.
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
-            telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
-            telemetry.update();
-        }
+            t.addData("Status", "Run Time: " + runtime.toString());
+            t.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
+            t.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
+            t.update();
+         }
+
+    }
+    public boolean opModeIsActive() {
+        if (opmode instanceof LinearOpMode)
+            return ((LinearOpMode) opmode).opModeIsActive();
+        else return false;
     }
 }
-
 
