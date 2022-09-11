@@ -12,10 +12,11 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Robot;
 
 @TeleOp(name="MecanumDrive", group="19380")
-@Disabled
+
 public class Teleop extends OpMode{
     OpMode opmode;
     public Robot robot = new Robot();
+    RobotBrain brain;
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftFrontDrive = null;
     private DcMotor leftBackDrive = null;
@@ -42,7 +43,7 @@ public class Teleop extends OpMode{
     public void loop() {
 
         // run until the end of the match (driver presses STOP)
-        while (opModeIsActive()) {
+        while (brain.opModeIsActive()) {
             double max;
 
             // POV Mode uses left joystick to go forward & strafe, and right joystick to rotate.
@@ -101,10 +102,6 @@ public class Teleop extends OpMode{
          }
 
     }
-    public boolean opModeIsActive() {
-        if (opmode instanceof LinearOpMode)
-            return ((LinearOpMode) opmode).opModeIsActive();
-        else return false;
-    }
+
 }
 
