@@ -21,7 +21,7 @@ public class VisionTester extends OpMode {
 
     @Override
     public void loop() {
-        //visionBrain.process(2000);
+        visionBrain.process(2000);
         //teleDrive();
     }
 }
